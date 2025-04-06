@@ -1,0 +1,127 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4db8ff, #005580);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    background-color: white;
+    width: 500px;
+    margin: 120px auto;
+    margin-bottom: 120px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #005580;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 12px;
+    margin: 15px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    background-color: #005580;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #004466;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+/* === Página de Listado de Usuarios === */
+
+body.usuarios-page {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4db8ff, #005580);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 60px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.container h2 {
+    text-align: center;
+    color: #005580;
+    margin-bottom: 20px;
+}
+
+form.filtro-estado {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+form.filtro-estado select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+table.usuarios {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+table.usuarios th,
+table.usuarios td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table.usuarios th {
+    background-color: #005580;
+    color: white;
+}
+
+.activo {
+    color: green;
+    font-weight: bold;
+}
+
+.inactivo {
+    color: red;
+    font-weight: bold;
+}
+a {
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 18px;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+
