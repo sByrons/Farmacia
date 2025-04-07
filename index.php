@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="assets/css/estilos.css">
-</head>
+<?php include_once realpath(__DIR__ . '/includes/head.php'); ?>
 <body>
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
@@ -18,6 +12,5 @@
             <p class="error">Credenciales inválidas</p>
         <?php endif; ?>
     </div>
-</body>
-</html>
+    <?php include_once realpath(__DIR__ . '/includes/footer.php'); ?>
 
