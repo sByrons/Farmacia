@@ -25,6 +25,10 @@ if (isset($_GET['accion']) && $_GET['accion'] == 'crear') {
     $puestos = obtenerPuestos();
     $tipos = obtenerTiposUsuario();
     $estados = obtenerEstados();
+    $provincias = obtenerProvincias();
+    $tiposTelefono = obtenerTiposTelefono();
+
+
 
     include_once __DIR__ . '/../views/usuario/crear.php';
     exit;

@@ -56,9 +56,55 @@ function obtenerEstados() {
     return $cursor;
 }
 
+function obtenerProvincias() {
+    $conn = conectarOracle("admin");
+    $cursor = oci_new_cursor($conn);
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_CATALOGOS_PKG.LISTAR_PROVINCIAS_SP(:P_CURSOR); END;");
+    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+    oci_execute($stmt);
+    oci_execute($cursor);
+    return $cursor;
+}
+
+function obtenerCantonesPorProvincia($idProvincia) {
+    $conn = conectarOracle("admin");
+    $cursor = oci_new_cursor($conn);
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_CATALOGOS_PKG.LISTAR_CANTONES_SP(:P_ID_PROVINCIA, :P_CURSOR); END;");
+    oci_bind_by_name($stmt, ":P_ID_PROVINCIA", $idProvincia);
+    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+    oci_execute($stmt);
+    oci_execute($cursor);
+    return $cursor;
+}
+
+function obtenerDistritosPorCanton($idCanton) {
+    $conn = conectarOracle("admin");
+    $cursor = oci_new_cursor($conn);
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_CATALOGOS_PKG.LISTAR_DISTRITOS_SP(:P_ID_CANTON, :P_CURSOR); END;");
+    oci_bind_by_name($stmt, ":P_ID_CANTON", $idCanton);
+    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+    oci_execute($stmt);
+    oci_execute($cursor);
+    return $cursor;
+}
+
+function obtenerTiposTelefono() {
+    $conn = conectarOracle("admin");
+
+    $cursor = oci_new_cursor($conn);
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_CATALOGOS_PKG.LISTAR_TIPOS_TELEFONO_SP(:P_CURSOR); END;");
+    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+    oci_execute($stmt);
+    oci_execute($cursor);
+
+    return $cursor;
+}
+
+
 function guardarUsuario($datos) {
     $conn = conectarOracle("admin");
 
+    
     $nombre      = $datos['nombre'];
     $apellido    = $datos['apellido'];
     $email       = $datos['email'];
@@ -69,10 +115,42 @@ function guardarUsuario($datos) {
     $contrasena  = ($id_tipo == 1 || $id_tipo == 2) ? $datos['contrasena'] : null;
     $id_puesto   = ($id_tipo == 1 || $id_tipo == 2) ? $datos['id_puesto'] : null;
 
-    $sql = "BEGIN FARMACIA.FIDE_USUARIOS_PKG.USUARIOS_INSERTAR_SP(
-        :P_NOMBRE, :P_APELLIDO, :P_USUARIO, :P_CONTRASENA,
-        :P_ID_PUESTO, :P_ID_TIPO, :P_ID_ESTADO, :P_EMAIL
-    ); END;";
+    $telefono    = $datos['telefono'];
+    $id_tipo_tel = $datos['id_tipo_telefono'];
+
+    $provincia   = $datos['provincia'];
+    $canton      = $datos['canton'];
+    $distrito    = $datos['distrito'];
+    $direccion   = $datos['direccion_exacta'];
+
+
+    $idGenerado = 0;
+
+    $sql = "
+    DECLARE
+        V_ID_USUARIO NUMBER;
+    BEGIN
+        -- Insertar usuario
+        FARMACIA.FIDE_USUARIOS_PKG.USUARIOS_INSERTAR_SP(
+            :P_NOMBRE, :P_APELLIDO, :P_USUARIO, :P_CONTRASENA,
+            :P_ID_PUESTO, :P_ID_TIPO, :P_ID_ESTADO, :P_EMAIL,
+            V_ID_USUARIO
+        );
+
+        -- Insertar dirección
+        FARMACIA.FIDE_CONTACTO_PKG.INSERTAR_DIRECCION_SP(
+            :P_PROVINCIA, :P_CANTON, :P_DISTRITO, :P_DIRECCION,
+            V_ID_USUARIO, NULL, :P_ID_ESTADO
+        );
+
+        -- Insertar teléfono
+        FARMACIA.FIDE_CONTACTO_PKG.INSERTAR_TELEFONO_SP(
+            :P_TELEFONO, :P_ID_TIPO_TEL, V_ID_USUARIO, NULL, :P_ID_ESTADO
+        );
+
+        :P_ID_GENERADO := V_ID_USUARIO;
+    END;
+    ";
 
     $stmt = oci_parse($conn, $sql);
 
@@ -85,6 +163,20 @@ function guardarUsuario($datos) {
     oci_bind_by_name($stmt, ":P_ID_ESTADO",  $id_estado);
     oci_bind_by_name($stmt, ":P_EMAIL",      $email);
 
+    
+    oci_bind_by_name($stmt, ":P_PROVINCIA",  $provincia);
+    oci_bind_by_name($stmt, ":P_CANTON",     $canton);
+    oci_bind_by_name($stmt, ":P_DISTRITO",   $distrito);
+    oci_bind_by_name($stmt, ":P_DIRECCION",  $direccion);
+
+    
+    oci_bind_by_name($stmt, ":P_TELEFONO",     $telefono);
+    oci_bind_by_name($stmt, ":P_ID_TIPO_TEL",  $id_tipo_tel);
+
+    
+    oci_bind_by_name($stmt, ":P_ID_GENERADO", $idGenerado, -1, SQLT_INT);
+
+    
     if (oci_execute($stmt)) {
         oci_free_statement($stmt);
         oci_close($conn);
@@ -96,6 +188,7 @@ function guardarUsuario($datos) {
         return "Error al guardar usuario: " . $e['message'];
     }
 }
+
 
 function cambiarEstadoUsuario($idUsuario, $nuevoEstado) {
     $conn = conectarOracle("admin");
