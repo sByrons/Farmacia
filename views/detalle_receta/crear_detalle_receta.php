@@ -1,8 +1,26 @@
 <?php
 session_start();
-if (!isset($_SESSION['usuario']) || $_SESSION['tipo'] != 2) {
-    header("Location: ../../index.php");
-    exit;
+include_once __DIR__ . '/../../controllers/detalleRecetaController.php';
+
+$mensaje = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $datos = [
+        'id_receta'   => $_POST['id_receta'],
+        'id_producto' => $_POST['id_producto'],
+        'cantidad'    => $_POST['cantidad'],
+        'id_unidad'   => $_POST['id_unidad'],
+        'frecuencia'  => $_POST['frecuencia'],
+        'duracion'    => $_POST['duracion'],
+        'id_estado'   => $_POST['id_estado'],
+    ];
+
+    $resultado = insertarDetalleReceta($datos);
+    if ($resultado === true) {
+        $mensaje = '<div class="mensaje-exito">✔ Detalle de receta guardado exitosamente.</div>';
+    } else {
+        $mensaje = '<div class="mensaje-error">' . $resultado . '</div>';
+    }
 }
 ?>
 
@@ -10,52 +28,30 @@ if (!isset($_SESSION['usuario']) || $_SESSION['tipo'] != 2) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registrar Detalle de Receta</title>
+    <title>Crear Detalle Receta</title>
     <link rel="stylesheet" href="/Farmacia/assets/css/estilos.css">
 </head>
 <body class="usuarios-page">
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a class="navbar-brand" href="/Farmacia/controllers/adminController.php">
-                <img src="https://img.icons8.com/matisse/100/pharmacy-shop.png" alt="Farmacia" width="40" height="40">
-                <span>Farmacia</span>
-            </a>
-            <ul class="navbar-links">
-                <li><a href="/Farmacia/controllers/usuarioController.php">Usuarios</a></li>
-                <li><a href="#">Productos</a></li>
-                <li><a href="#">Facturación</a></li>
-                <li><a href="#">Recetas</a></li>
-                <li><a href="/Farmacia/logout.php">Cerrar sesión</a></li>
-            </ul>
-        </div>
-    </nav>
+<?php include_once __DIR__ . '/../../includes/navbar.php'; ?>
 
-    <!-- Formulario -->
-    <div class="form-crear">
-        <h2>Registrar Detalle de Receta</h2>
+<div class="form-crear">
+    <h2>Agregar Detalle a una Receta</h2>
 
-        <?php if (isset($_GET['exito'])): ?>
-            <div class="mensaje-exito">✔️ ¡Detalle registrado correctamente!</div>
-        <?php elseif (isset($_GET['error'])): ?>
-            <div class="mensaje-error">❌ <?= htmlspecialchars($_GET['error']) ?></div>
-        <?php endif; ?>
+    <?= $mensaje ?>
 
-        <form action="/Farmacia/controllers/detalleRecetaController.php" method="POST">
-            <input type="number" name="id_receta" placeholder="ID Receta" required>
-            <input type="number" name="id_producto" placeholder="ID Producto" required>
-            <input type="number" name="cantidad" placeholder="Cantidad" required>
-            <input type="number" name="id_unidad" placeholder="ID Unidad de Dosis" required>
-            <input type="number" name="frecuencia" placeholder="Frecuencia (horas)" required>
-            <input type="number" name="duracion" placeholder="Duración (días)" required>
-            <input type="number" name="id_estado" placeholder="ID Estado" required>
+    <form method="POST" action="">
+        <input type="number" name="id_receta" placeholder="ID de la receta" required>
+        <input type="number" name="id_producto" placeholder="ID del producto" required>
+        <input type="number" name="cantidad" placeholder="Cantidad" required>
+        <input type="number" name="id_unidad" placeholder="ID de unidad de dosis" required>
+        <input type="number" name="frecuencia" placeholder="Frecuencia (horas)" required>
+        <input type="number" name="duracion" placeholder="Duración (días)" required>
+        <input type="number" name="id_estado" placeholder="ID de estado" required>
 
-            <button type="submit">Guardar Detalle</button>
-        </form>
-    </div>
+        <button type="submit">Guardar Detalle</button>
+    </form>
+</div>
 
-    <footer class="footer">
-        <p>© <?= date("Y") ?> Farmacia. Todos los derechos reservados.</p>
-    </footer>
+<?php include_once __DIR__ . '/../../includes/footer.php'; ?>
 </body>
 </html>
