@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['usuario']) || $_SESSION['tipo'] != 2) {
+    header("Location: ../index.php");
+    exit;
+}
+
 include_once __DIR__ . '/../models/detalle_receta.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
