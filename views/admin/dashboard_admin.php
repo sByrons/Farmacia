@@ -16,7 +16,7 @@
   <div class="dashboard-card">
     <h3>Productos registrados</h3>
     <p><?= $productosTotales ?></p>
-    <a href="#">Ver productos</a>
+    <a href="../controllers/ProductoController.php">Ver Productos</a>
   </div>
 
   <div class="dashboard-card">
