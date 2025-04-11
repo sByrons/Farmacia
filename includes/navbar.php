@@ -6,7 +6,7 @@
     </a>
     <ul class="navbar-links">
       <li><a href="/Farmacia/controllers/usuarioController.php">Usuarios</a></li>
-      <li><a href="#">Productos</a></li>
+      <li><a href="/Farmacia/controllers/productoController.php">Productos</a></li>
       <li><a href="#">Facturación</a></li>
       <li><a href="#">Recetas</a></li>
       <li><a href="/Farmacia/logout.php">Cerrar sesión</a></li>
