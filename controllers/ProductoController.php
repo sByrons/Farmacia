@@ -60,15 +60,19 @@ if (isset($_GET['accion']) && in_array($_GET['accion'], ['eliminar', 'activar'])
     exit;
 }
 
-if (isset($_GET['accion']) && $_GET['accion'] === 'editar' && isset($_GET['id'])) {
+ if (isset($_GET['accion']) && $_GET['accion'] === 'editar' && isset($_GET['id'])) {
     $idProducto = $_GET['id'];
     $producto = obtenerProductoPorId($idProducto);
-    $estados = obtenerEstados();  // Suponiendo que existe una función para obtener los estados
+    
     include_once __DIR__ . '/../views/producto/editar.php';
     exit;
 }
+
+
+
 
 // Mostrar lista de productos
 $estadoId = isset($_GET['estado']) ? intval($_GET['estado']) : 1;
 $productos = listarProductosPorEstado($estadoId);
 include_once __DIR__ . '/../views/producto/listar.php';
+

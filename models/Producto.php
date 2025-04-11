@@ -15,7 +15,7 @@ function listarProductosPorEstado($estadoId) {
     $cursor = oci_new_cursor($conn);
 
     // Preparar el llamado al procedimiento
-    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_CONSULTAR_POR_ESTADO(:P_ESTADO_ID, :P_CURSOR); END;");
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTOS_LISTAR_SP(:P_ESTADO_ID, :P_CURSOR); END;");
 
     // Vincular los parámetros
     oci_bind_by_name($stmt, ":P_ESTADO_ID", $estadoId, 32);  // Vincula el estado
@@ -76,25 +76,10 @@ function guardarProducto($datos) {
         oci_close($conn);
         return "Error al guardar producto: " . $e['message'];
     }
-}
+
 
 // Función para actualizar un producto
-function actualizarProducto($datos) {
-    $conn = conectarOracle("admin");
 
-    $idProducto     = $datos['id_producto'];
-    $nombre         = $datos['nombre'];
-    $descripcion    = $datos['descripcion'];
-    $precio         = $datos['precio'];
-    $estadoId       = $datos['estado_id'];
-
-    $sql = "
-    BEGIN
-        FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_ACTUALIZAR_SP(
-            :P_ID_PRODUCTO, :P_NOMBRE, :P_DESCRIPCION, :P_PRECIO, :P_ESTADO
-        );
-    END;
-    ";
 
     $stmt = oci_parse($conn, $sql);
 
@@ -147,22 +132,43 @@ function eliminarProducto($idProducto, $estadoInactivo) {
 function obtenerProductoPorId($idProducto) {
     $conn = conectarOracle("admin");
 
-    $cursor = oci_new_cursor($conn);
-    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_CONSULTAR_SP(:P_ESTADO, :P_CURSOR); END;");
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_CONSULTAR_SP(:P_ID_PRODUCTO, :P_NOMBRE, :P_DESCRIPCION, :P_PRECIO); END;");
+
     oci_bind_by_name($stmt, ":P_ID_PRODUCTO", $idProducto);
-    oci_bind_by_name($stmt, ":P_CURSOR", $cursor, -1, OCI_B_CURSOR);
+    oci_bind_by_name($stmt, ":P_NOMBRE", $nombre, 100);
+    oci_bind_by_name($stmt, ":P_DESCRIPCION", $descripcion, 200);
+    oci_bind_by_name($stmt, ":P_PRECIO", $precio);
 
     oci_execute($stmt);
-    oci_execute($cursor);
 
+    oci_free_statement($stmt);
+    oci_close($conn);
+
+    // Retornar como un arreglo asociativo compatible con tu vista
+    return [
+        'PRODUCTO_ID_PRODUCTO_PK' => $idProducto,
+        'NOMBRE' => $nombre,
+        'DESCRIPCION' => $descripcion,
+        'PRECIO' => $precio
+        // IMPORTANTE: ESTADO no se recupera aquí, debes obtenerlo aparte
+    ];
+
+
+
+
+    // Obtener el producto
     $producto = oci_fetch_assoc($cursor);
 
+    // Liberar los recursos
     oci_free_statement($stmt);
     oci_free_statement($cursor);
     oci_close($conn);
 
+    // Retornar el producto
     return $producto;
 }
+
+
 
 
 function obtenerEstados() {
@@ -208,6 +214,43 @@ function listarTodosLosProductos() {
 
     // Retornar los resultados
     return $productos;
+}
+function actualizarProducto($datos) {
+    $conn = conectarOracle("admin");
+
+    $idProducto   = $datos['id_producto'];
+    $nombre       = $datos['nombre'];
+    $descripcion  = $datos['descripcion'];
+    $precio       = $datos['precio'];
+    $idEstado     = $datos['id_estado'];
+
+    $sql = "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_ACTUALIZAR_SP(
+        :P_ID_PRODUCTO,
+        :P_NOMBRE,
+        :P_DESCRIPCION,
+        :P_PRECIO_UNITARIO,
+        :P_ID_ESTADO
+    ); END;";
+
+    $stmt = oci_parse($conn, $sql);
+
+    oci_bind_by_name($stmt, ":P_ID_PRODUCTO", $idProducto);
+    oci_bind_by_name($stmt, ":P_NOMBRE", $nombre);
+    oci_bind_by_name($stmt, ":P_DESCRIPCION", $descripcion);
+    oci_bind_by_name($stmt, ":P_PRECIO_UNITARIO", $precio);
+    oci_bind_by_name($stmt, ":P_ID_ESTADO", $idEstado);
+
+    $resultado = oci_execute($stmt);
+
+    if (!$resultado) {
+        $error = oci_error($stmt);
+        echo "Error al ejecutar: " . $error['message'];
+    }
+
+    oci_free_statement($stmt);
+    oci_close($conn);
+
+    return $resultado;
 }
 
 ?>
