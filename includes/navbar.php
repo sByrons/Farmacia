@@ -8,7 +8,7 @@
       <li><a href="/Farmacia/controllers/usuarioController.php">Usuarios</a></li>
       <li><a href="/Farmacia/controllers/productoController.php">Productos</a></li>
       <li><a href="#">Facturación</a></li>
-      <li><a href="#">Recetas</a></li>
+      <li><a href="/Farmacia/controllers/receta_Controller.php">Recetas</a></li>
       <li><a href="/Farmacia/logout.php">Cerrar sesión</a></li>
     </ul>
   </div>
