@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         guardarReceta($_POST);
 
         // Redirigir a la vista principal de recetas
-        header('Location: /Farmacia/views/Resetas/reseta.php');
+        header('Location: /Farmacia/views/receta.php');
         exit();
     } else {
         echo "Acción no válida.";
