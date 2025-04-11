@@ -306,3 +306,117 @@ body.usuarios-page {
   }
   
   
+  body.recetas-page {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4db8ff, #005580);
+    margin: 0;
+    padding: 0;
+}
+
+.form-receta {
+  max-width: 600px;
+  margin: 60px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-receta h2 {
+  text-align: center;
+  color: #005580;
+  margin-bottom: 25px;
+}
+
+.form-receta input,
+.form-receta select {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.form-receta button {
+  background-color: #005580;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+.form-receta button:hover {
+  background-color: #004060;
+}
+
+/* Tabla de recetas */
+table.recetas {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 20px;
+}
+
+table.recetas th,
+table.recetas td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+table.recetas th {
+  background-color: #005580;
+  color: white;
+}
+
+table.recetas tr:nth-child(even) {
+  background-color: #f2f9ff;
+}
+
+table.recetas tr:hover {
+  background-color: #d0ecff;
+}
+
+/* Estados visuales */
+.receta-activa {
+  color: green;
+  font-weight: bold;
+}
+
+.receta-inactiva {
+  color: red;
+  font-weight: bold;
+}
+
+/* Acciones de receta */
+.recetas-acciones a {
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 18px;
+  color: #005580;
+  transition: color 0.2s ease;
+}
+
+.recetas-acciones a:hover {
+  color: #003f66;
+}
+
+.nueva-receta {
+  display: inline-block;
+  background-color: #005580;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.nueva-receta:hover {
+  background-color: #004466;
+}
