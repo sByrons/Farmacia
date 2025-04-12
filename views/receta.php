@@ -2,8 +2,20 @@
 include_once __DIR__ . '/../includes/head.php';
 include_once __DIR__ . '/../includes/navbar.php';
 include_once __DIR__ . '/../models/Producto.php';
-include_once __DIR__ . '/../models/UnidadDosis.php';
-include_once __DIR__ . '/../models/Receta.php';
+include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
+include_once __DIR__ . '/Recetas.php';
+include_once __DIR__ . '/../models/Recetas.php';
+include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
+include_once('Recetas.php');
+
+include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
+
+
+
+
+
+$productos = obtenerProductos();
+
 
 // Obtener estados, productos y unidades
 $estados = obtenerEstados();

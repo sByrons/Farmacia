@@ -1,5 +1,20 @@
 <?php
-include_once __DIR__ . '/../config/database/conexion.php';
+include_once __DIR__ . '/../models/Recetas.php';
+
+$productos = obtenerProductos();
+
+// models/Receta.php
+
+function obtenerProductos() {
+    return [
+        ['id' => 1, 'nombre' => 'Paracetamol'],
+        ['id' => 2, 'nombre' => 'Ibuprofeno'],
+        ['id' => 3, 'nombre' => 'Amoxicilina']
+    ];
+}
+
+
+
 
 // Crear receta
 function guardarReceta($datos) {
