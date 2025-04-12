@@ -1,23 +1,16 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// NO incluyas Recetas.php ni rutas mal escritas
 include_once __DIR__ . '/../includes/head.php';
 include_once __DIR__ . '/../includes/navbar.php';
+
 include_once __DIR__ . '/../models/Producto.php';
-include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
-include_once __DIR__ . '/Recetas.php';
+include_once __DIR__ . '/../models/Unidad_Dosis.php';
 include_once __DIR__ . '/../models/Recetas.php';
-include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
-include_once('Recetas.php');
 
-include_once __DIR__ . '/../models/Unidad_Dosis.php.php';
-
-
-
-
-
-$productos = obtenerProductos();
-
-
-// Obtener estados, productos y unidades
 $estados = obtenerEstados();
 $productos = obtenerProductos();
 $unidades = obtenerUnidadesDosis();

@@ -1,9 +1,20 @@
 <?php
+
+
+
 include_once __DIR__ . '/../models/Recetas.php';
 
 $productos = obtenerProductos();
 
 // models/Receta.php
+function obtenerEstados() {
+    $conn = oci_connect('usuario', 'contraseña', 'localhost/XE');
+    $sql = "SELECT ESTADO_ID_ESTADO_PK, DESCRIPCION FROM FIDE_ESTADO_TB";
+    $stmt = oci_parse($conn, $sql);
+    oci_execute($stmt);
+    return $stmt;
+}
+
 
 function obtenerProductos() {
     return [
@@ -12,6 +23,8 @@ function obtenerProductos() {
         ['id' => 3, 'nombre' => 'Amoxicilina']
     ];
 }
+
+
 
 
 
