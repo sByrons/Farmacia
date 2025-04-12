@@ -110,7 +110,12 @@ function actualizarReceta($datos) {
     return true;
 }
 
+
+
 // Eliminar receta (desactivar)
+
+
+
 function eliminarReceta($idReceta, $estadoInactivo) {
     $conn = conectarOracle("admin");
 

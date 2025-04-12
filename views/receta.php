@@ -13,6 +13,51 @@ include_once __DIR__ . '/../models/Recetas.php';
 $estados = obtenerEstados();
 $productos = obtenerProductos();
 $unidades = obtenerUnidadesDosis();
+
+function obtenerRecetas() {
+  $conn = oci_connect('USUARIO', 'CLAVE', 'localhost/XE');
+  $sql = "SELECT r.RECETA_ID_RECETA_PK, r.ID_USUARIO, r.FECHA, e.DESCRIPCION AS ESTADO
+          FROM FIDE_RECETA_TB r
+          JOIN FIDE_ESTADO_TB e ON r.ID_ESTADO = e.ESTADO_ID_ESTADO_PK
+          ORDER BY r.FECHA DESC";
+  $stmt = oci_parse($conn, $sql);
+  oci_execute($stmt);
+  return $stmt;
+}
+
+// Mostrar recetas existentes
+$recetas = obtenerRecetas();
+?>
+
+<h2>Recetas Registradas</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Usuario</th>
+      <th>Fecha</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php while ($r = oci_fetch_assoc($recetas)): ?>
+      <tr>
+        <td><?= $r['RECETA_ID_RECETA_PK'] ?></td>
+        <td><?= $r['ID_USUARIO'] ?></td>
+        <td><?= $r['FECHA'] ?></td>
+        <td><?= $r['ESTADO'] ?></td>
+        <td>
+          <a href="/Farmacia/controllers/receta_Controller.php?accion=editar&id=<?= $r['RECETA_ID_RECETA_PK'] ?>">✏️ Editar</a>
+          <a href="/Farmacia/controllers/receta_Controller.php?accion=eliminar&id=<?= $r['RECETA_ID_RECETA_PK'] ?>" onclick="return confirm('¿Eliminar esta receta?');">🗑️ Eliminar</a>
+        </td>
+      </tr>
+    <?php endwhile; ?>
+  </tbody>
+</table>
+
+
 ?>
 
 <div class="main-content">

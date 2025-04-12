@@ -32,3 +32,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: /Farmacia/views/receta.php');
     exit();
 }
+
+
+include_once __DIR__ . '/../models/Receta.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_POST['accion'] === 'guardar_receta') {
+        guardarReceta($_POST);
+        header('Location: /Farmacia/views/receta.php');
+        exit();
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($_GET['accion'] === 'eliminar' && isset($_GET['id'])) {
+        eliminarReceta($_GET['id']);
+        header('Location: /Farmacia/views/receta.php');
+        exit();
+    }
+    if ($_GET['accion'] === 'editar' && isset($_GET['id'])) {
+        // Aquí podrías redirigir a una vista de edición o cargar modal, según tu estructura
+    }
+}
