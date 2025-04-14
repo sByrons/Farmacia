@@ -1,54 +1,71 @@
 <?php
 session_start();
-include_once __DIR__ . '/../models/Recetas.php';
-
-if (isset($_GET['accion']) && $_GET['accion'] === 'eliminar' && isset($_GET['id'])) {
-    $resultado = eliminarReceta($_GET['id']);
-    $_SESSION[$resultado === true ? 'mensaje' : 'error'] = $resultado === true ? "Receta eliminada correctamente." : $resultado;
-    header("Location: listar_recetas.php");
-    exit;
-}
-
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['accion']) && $_POST['accion'] === 'guardar_receta') {
-        include_once realpath(__DIR__ . '/../models/Recetas.php');
+include_once __DIR__ . '/../models/Receta.php'; // Modelo principal
+header('Location: /Farmacia/controllers/receta_Controller.php?accion=crear');
 
-        // Asegúrate de que la función guardarReceta exista en tu modelo
-        guardarReceta($_POST);
+$accion = $_POST['accion'] ?? $_GET['accion'] ?? null;
 
-        // Redirigir a la vista principal de recetas
-        header('Location: /Farmacia/views/receta.php');
-        exit();
+// --- GUARDAR NUEVA RECETA ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $accion === 'guardar') {
+    $resultado = guardarReceta($_POST);
+
+    if ($resultado === true) {
+        $_SESSION['mensaje'] = "Receta guardada correctamente.";
     } else {
-        echo "Acción no válida.";
+        $_SESSION['error'] = "Error al guardar receta: $resultado";
     }
+    header("Location: /Farmacia/views/receta/listar.php");
+    exit;
+}
+
+// --- ACTUALIZAR RECETA EXISTENTE ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $accion === 'actualizar') {
+    $resultado = actualizarReceta($_POST);
+
+    if ($resultado === true) {
+        $_SESSION['mensaje'] = "Receta actualizada correctamente.";
+    } else {
+        $_SESSION['error'] = "Error al actualizar receta: $resultado";
+    }
+    header("Location: /Farmacia/views/receta/listar.php");
+    exit;
+}
+
+// --- ELIMINAR RECETA ---
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $accion === 'eliminar' && isset($_GET['id'])) {
+    $resultado = eliminarReceta($_GET['id']);
+
+    if ($resultado === true) {
+        $_SESSION['mensaje'] = "Receta eliminada correctamente.";
+    } else {
+        $_SESSION['error'] = "Error al eliminar receta: $resultado";
+    }
+    header("Location: /Farmacia/views/receta/listar.php");
+    exit;
+}
+
+// --- ACCESO DIRECTO: redireccionar a listado ---
+if (file_exists(__DIR__ . '/../views/receta/listar.php')) {
+    header("Location: /Farmacia/views/receta/listar.php");
+    exit;
 } else {
-    // Redirige a la vista de creación de recetas si se accede por GET
-    header('Location: /Farmacia/views/receta.php');
-    exit();
+    echo "Archivo listar.php no encontrado en /views/receta/";
 }
 
+// RecetaController.php
 
-include_once __DIR__ . '/../models/Receta.php';
+include_once realpath(__DIR__ . '/../models/Receta.php');
+include_once realpath(__DIR__ . '/../models/Estado.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['accion'] === 'guardar_receta') {
-        guardarReceta($_POST);
-        header('Location: /Farmacia/views/receta.php');
-        exit();
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if ($_GET['accion'] === 'eliminar' && isset($_GET['id'])) {
-        eliminarReceta($_GET['id']);
-        header('Location: /Farmacia/views/receta.php');
-        exit();
-    }
-    if ($_GET['accion'] === 'editar' && isset($_GET['id'])) {
-        // Aquí podrías redirigir a una vista de edición o cargar modal, según tu estructura
-    }
-}
+// Obtener el filtro de estado (si existe en la URL)
+$estadoId = isset($_GET['estado']) ? $_GET['estado'] : 1; // Por defecto, filtro por "activo" (1)
+
+// Obtener las recetas con el estado filtrado
+$recetas = obtenerRecetasPorEstado($estadoId); // Función que obtiene las recetas filtradas por estado
+
+// Pasar las recetas y el estado a la vista
+include_once realpath(__DIR__ . '/../views/receta/listar.php');

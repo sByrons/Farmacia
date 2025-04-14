@@ -1,7 +1,6 @@
 <?php
 
 
-
 include_once __DIR__ . '/../models/Recetas.php';
 
 $productos = obtenerProductos();
@@ -15,7 +14,6 @@ function obtenerEstados() {
     return $stmt;
 }
 
-
 function obtenerProductos() {
     return [
         ['id' => 1, 'nombre' => 'Paracetamol'],
@@ -23,7 +21,6 @@ function obtenerProductos() {
         ['id' => 3, 'nombre' => 'Amoxicilina']
     ];
 }
-
 
 
 
@@ -111,9 +108,7 @@ function actualizarReceta($datos) {
 }
 
 
-
 // Eliminar receta (desactivar)
-
 
 
 function eliminarReceta($idReceta, $estadoInactivo) {
@@ -199,4 +194,37 @@ function listarTodasLasRecetas() {
 
     return $recetas;
 }
+
+function guardarReceta($data) {
+
+}
+
+function actualizarReceta($data) {
+
+}
+
+function eliminarReceta($id) {
+    
+}
+function obtenerRecetasPorEstado($estadoId) {
+    // Aquí deberías realizar la consulta a la base de datos usando el estado recibido.
+    // Asegúrate de que la consulta retorne las recetas basadas en el estado.
+
+    $sql = "SELECT r.RECETA_ID_RECETA_PK, r.FECHA, u.NOMBRE AS USUARIO, e.DESCRIPCION AS ESTADO
+            FROM FIDE_RECETA_TB r
+            JOIN FIDE_USUARIOS_TB u ON r.ID_USUARIO = u.USUARIOS_ID_USUARIO_PK
+            JOIN FIDE_ESTADO_TB e ON r.ID_ESTADO = e.ESTADO_ID_ESTADO_PK
+            WHERE r.ID_ESTADO = :estadoId";
+    
+    $stid = oci_parse($conn, $sql);
+    oci_bind_by_name($stid, ':estadoId', $estadoId);
+    oci_execute($stid);
+
+    $recetas = [];
+    while ($row = oci_fetch_assoc($stid)) {
+        $recetas[] = $row;
+    }
+    return $recetas;
+}
+
 ?>
