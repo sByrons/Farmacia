@@ -16,5 +16,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['tipo'] != 2) {
 <body>
     <h1>Bienvenido, empleado <?php echo $_SESSION['usuario']; ?>!</h1>
     <a href="logout.php">Cerrar sesión</a>
+    
+    
+
 </body>
 </html>
