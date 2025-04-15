@@ -1,5 +1,5 @@
-<?php include_once realpath(__DIR__ . '/../../includes/head.php'); ?>
-<?php include_once realpath(__DIR__ . '/../../includes/navbar.php'); ?>
+<?php include_once realpath(_DIR_ . '/../../includes/head.php'); ?>
+<?php include_once realpath(_DIR_ . '/../../includes/navbar.php'); ?>
 
 <div class="main-content">
 <body class="recetas-page">
@@ -68,5 +68,4 @@
 </div>
 </div>
 
-<?php include_once realpath(__DIR__ . '/../../includes/footer.php'); ?>
-
+<?php include_once realpath(_DIR_ . '/../../includes/footer.php'); ?>

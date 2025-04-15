@@ -1,13 +1,14 @@
 <?php
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+if (!isset($_SESSION['usuario']) || $_SESSION['tipo'] != 1) {
+    header("Location: ../index.php");
+    exit;
+}
 
-include_once __DIR__ . '/../models/Receta.php'; // Modelo principal
-header('Location: /Farmacia/controllers/receta_Controller.php?accion=crear');
+include_once __DIR__ . '/../models/Recetas.php'; // Modelo de recetas
 
 $accion = $_POST['accion'] ?? $_GET['accion'] ?? null;
+$estadoId = $_GET['estado'] ?? 1; // valor por defecto: Activo
 
 // --- GUARDAR NUEVA RECETA ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $accion === 'guardar') {
@@ -35,40 +36,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $accion === 'actualizar') {
     exit;
 }
 
-// --- ELIMINAR RECETA ---
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $accion === 'eliminar' && isset($_GET['id'])) {
-    $resultado = eliminarReceta($_GET['id']);
+// --- ELIMINAR / DESACTIVAR RECETA ---
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $accion === 'desactivar' && isset($_GET['id'])) {
+    $resultado = eliminarReceta($_GET['id'], 2); // Estado 2 = Inactivo
 
     if ($resultado === true) {
-        $_SESSION['mensaje'] = "Receta eliminada correctamente.";
+        $_SESSION['mensaje'] = "Receta desactivada correctamente.";
     } else {
-        $_SESSION['error'] = "Error al eliminar receta: $resultado";
+        $_SESSION['error'] = "Error al desactivar receta: $resultado";
     }
     header("Location: /Farmacia/views/receta/listar.php");
     exit;
 }
 
-// --- ACCESO DIRECTO: redireccionar a listado ---
-// --- ACCESO DIRECTO: redireccionar a listado ---
-if (file_exists(__DIR__ . '/../views/receta/listar.php')) {
+// --- ACTIVAR RECETA ---
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $accion === 'activar' && isset($_GET['id'])) {
+    $resultado = eliminarReceta($_GET['id'], 1); // Estado 1 = Activo
+
+    if ($resultado === true) {
+        $_SESSION['mensaje'] = "Receta activada correctamente.";
+    } else {
+        $_SESSION['error'] = "Error al activar receta: $resultado";
+    }
     header("Location: /Farmacia/views/receta/listar.php");
     exit;
-} else {
-    echo "Archivo listar.php no encontrado en /views/receta/";
 }
 
+// --- LISTAR RECETAS ---
+if ($accion === 'listar' || $_SERVER['REQUEST_METHOD'] === 'GET') {
+    $recetas = obtenerRecetasPorEstado($estadoId);
+    include_once __DIR__ . '/../views/receta/listar.php';
+    exit;
+}
 
-// RecetaController.php
-
-include_once realpath(__DIR__ . '/../models/Receta.php');
-include_once realpath(__DIR__ . '/../models/Estado.php');
-
-// Obtener el filtro de estado (si existe en la URL)
-$estadoId = isset($_GET['estado']) ? $_GET['estado'] : 1; // Por defecto, filtro por "activo" (1)
-
-// Obtener las recetas con el estado filtrado
-$recetas = obtenerRecetasPorEstado($estadoId); // Función que obtiene las recetas filtradas por estado
-
-// Pasar las recetas y el estado a la vista
-include_once realpath(__DIR__ . '/../views/receta/listar.php');
+// --- Si no coincide con ninguna acción conocida ---
+echo "Acción no válida.";
+?>
 

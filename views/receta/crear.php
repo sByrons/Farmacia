@@ -1,10 +1,10 @@
 <?php 
-include_once realpath(__DIR__ . '/../../includes/head.php'); 
-include_once realpath(__DIR__ . '/../../includes/navbar.php'); 
+include_once realpath(_DIR_ . '/../../includes/head.php'); 
+include_once realpath(_DIR_ . '/../../includes/navbar.php'); 
 
-include_once realpath(__DIR__ . '/../../models/Producto.php');
-include_once realpath(__DIR__ . '/../../models/UnidadDosis.php');
-include_once realpath(__DIR__ . '/../../models/Estado.php');
+include_once realpath(_DIR_ . '/../../models/Producto.php');
+include_once realpath(_DIR_ . '/../../models/UnidadDosis.php');
+include_once realpath(_DIR_ . '/../../models/Estado.php');
 
 // Simulando usuario autenticado
 $id_usuario = 1; // En la práctica lo obtienes desde $_SESSION o autenticación
@@ -83,4 +83,4 @@ $estados = obtenerEstados();
   <script src="/Farmacia/assets/js/script.js"></script>
 </div>
 
-<?php include_once realpath(__DIR__ . '/../../includes/footer.php'); ?>
+<?php include_once realpath(_DIR_ . '/../../includes/footer.php'); ?>

@@ -1,7 +1,7 @@
 <?php 
 function eliminarReceta($idReceta) {
     try {
-        include_once __DIR__ . '/../config/conexion.php'; // Asegúrate de tener este archivo
+        include_once _DIR_ . '/../config/conexion.php'; // Asegúrate de tener este archivo
 
         // Iniciar conexión
         $conn = conectar(); // Tu función para conectar a Oracle
@@ -35,5 +35,5 @@ function eliminarReceta($idReceta) {
             oci_rollback($conn);
         }
         return "Error al eliminar la receta: " . $e->getMessage();
-    }
+    }
 }

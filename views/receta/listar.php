@@ -1,173 +1,183 @@
-<?php include_once realpath(__DIR__ . '/../../includes/head.php'); ?>
-<?php include_once realpath(__DIR__ . '/../../includes/navbar.php'); ?>
+<?php 
+include_once realpath(__DIR__ . '/../../includes/head.php'); 
+include_once realpath(__DIR__ . '/../../includes/navbar.php'); 
+
+// Obtenemos el estado seleccionado del filtro
+$estadoId = $_GET['estado'] ?? 1;  // Default es 1 (Activo)
+
+// Llamamos al modelo para obtener las recetas basadas en el estado
+include_once __DIR__ . '/../../models/Recetas.php';
+$recetas = obtenerRecetasPorEstado($estadoId);
+?>
+
 <style>
-    body.receta-page {
-        background-color: #f0f8ff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    body.recetas-page {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-content {
+        margin: 20px;
     }
 
     .container {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 85, 128, 0.2);
-        margin-top: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     h2 {
-        color: #005580;
+        font-size: 24px;
         margin-bottom: 20px;
+        color: #333;
     }
 
     .filtro-estado {
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .filtro-estado label {
-        font-weight: bold;
-        color: #003d66;
+        font-size: 16px;
+        margin-right: 10px;
     }
 
     .filtro-estado select {
         padding: 5px 10px;
-        border: 1px solid #005580;
-        border-radius: 5px;
-        background-color: #e6f2ff;
-        color: #003d66;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
     }
 
     .recetas {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 15px;
     }
 
     .recetas th, .recetas td {
-        padding: 12px;
-        border: 1px solid #cce0ff;
-        text-align: center;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
     }
 
     .recetas th {
-        background-color: #0077b3;
-        color: white;
+        background-color: #f5f5f5;
     }
 
-    .recetas tr:nth-child(even) {
-        background-color: #f2f9ff;
+    .recetas td a {
+        text-decoration: none;
+        color: #007bff;
+        margin-right: 10px;
     }
 
-    .recetas tr:hover {
-        background-color: #d0ecff;
-    }
-
-    .activo {
-        color: green;
-        font-weight: bold;
-    }
-
-    .inactivo {
-        color: red;
-        font-weight: bold;
+    .recetas td a:hover {
+        text-decoration: underline;
     }
 
     .mensaje-exito, .mensaje-error {
         padding: 10px;
-        margin: 15px 0;
+        margin-bottom: 20px;
         border-radius: 5px;
-        font-weight: bold;
+        font-size: 16px;
     }
 
     .mensaje-exito {
-        background-color: #d4edda;
-        color: #155724;
-    }
-
-    .mensaje-error {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-
-    .main-content a {
-        text-decoration: none;
-        padding: 8px 12px;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-
-    .main-content a[href*="crear"] {
-        background-color: #005580;
+        background-color: #28a745;
         color: white;
     }
 
-    .main-content a[href*="editar"] {
-        color: #006699;
+    .mensaje-error {
+        background-color: #dc3545;
+        color: white;
     }
 
-    .main-content a[href*="eliminar"] {
-        margin-left: 5px;
-        color: red;
+    .recetas td.acciones a {
+        font-size: 18px;
+    }
+
+    .recetas td.acciones a:hover {
+        color: #0056b3;
+    }
+
+    .mensaje-exito {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .mensaje-error {
+        background-color: #dc3545;
+        color: white;
     }
 </style>
 
 <div class="main-content">
-<body class="receta-page">
+    <body class="recetas-page">
+        <a href="/Farmacia/controllers/receta_Controller.php?accion=crear">Nueva Receta</a>
 
-<?php if (isset($_SESSION['mensaje'])): ?>
-    <div class="mensaje-exito">
-        <?= $_SESSION['mensaje']; ?>
-    </div>
-    <?php unset($_SESSION['mensaje']); ?>
-<?php endif; ?>
+        <?php if (isset($_SESSION['mensaje'])): ?>
+            <div class="mensaje-exito">
+                <?= $_SESSION['mensaje']; ?>
+            </div>
+            <?php unset($_SESSION['mensaje']); ?>
+        <?php endif; ?>
 
-<?php if (isset($_SESSION['error'])): ?>
-    <div class="mensaje-error">
-        <?= $_SESSION['error']; ?>
-    </div>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="mensaje-error">
+                <?= $_SESSION['error']; ?>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
 
-<div class="container">
-    <h2>Recetas del Sistema</h2>
-    <div style="text-align: right; margin-bottom: 10px;">
-        <a href="/Farmacia/controllers/receta_Controller.php?accion=crear">+ Nueva Receta</a>
-    </div>
+        <div class="container">
+            <h2>Recetas del Sistema</h2>
+            <div style="text-align: right; margin-bottom: 10px;">
+                <a href="/Farmacia/controllers/receta_Controller.php?accion=crear">+ Nueva Receta</a>
+            </div>
 
-    <form method="GET" action="/Farmacia/controllers/receta_Controller.php" class="filtro-estado">
-        <label for="estado">Filtrar por estado:</label>
-        <select name="estado" id="estado" onchange="this.form.submit()">
-            <option value="1" <?php if ($estadoId == 1) echo 'selected'; ?>>Activo</option>
-            <option value="2" <?php if ($estadoId == 2) echo 'selected'; ?>>Inactivo</option>
-        </select>
-    </form>
+            <form method="GET" action="" class="filtro-estado">
+                <label for="estado">Filtrar por estado:</label>
+                <select name="estado" id="estado" onchange="this.form.submit()">
+                    <option value="1" <?php if ($estadoId == 1) echo 'selected'; ?>>Activo</option>
+                    <option value="2" <?php if ($estadoId == 2) echo 'selected'; ?>>Inactivo</option>
+                </select>
+            </form>
 
-    <table class="recetas">
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Paciente / Médico</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
+            <table class="recetas">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
 
-        <?php foreach ($recetas as $row): ?>
-            <tr>
-                <td><?= $row['RECETA_ID_RECETA_PK']; ?></td>
-                <td><?= date('d/m/Y', strtotime($row['FECHA'])); ?></td>
-                <td><?= $row['USUARIO']; ?></td>
-                <td class="<?= strtolower($row['ESTADO']); ?>"><?= $row['ESTADO']; ?></td>
-                <td>
-                    <a href="/Farmacia/controllers/receta_Controller.php?accion=editar&id=<?= $row['RECETA_ID_RECETA_PK']; ?>">✏️</a>
-                    <a href="/Farmacia/controllers/receta_Controller.php?accion=eliminar&id=<?= $row['RECETA_ID_RECETA_PK']; ?>" onclick="return confirm('¿Seguro que deseas eliminar esta receta?');">🗑️</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-</div>
-</body>
+                <?php if (!empty($recetas)): ?>
+                    <?php foreach ($recetas as $row): ?>
+                        <tr>
+                            <td><?php echo date("d/m/Y", strtotime($row['FECHA'])); ?></td>
+                            <td><?php echo $row['USUARIO']; ?></td>
+                            <td class="<?php echo strtolower($row['ESTADO']); ?>"><?php echo $row['ESTADO']; ?></td>
+                            <td class="acciones">
+                                <a href="/Farmacia/controllers/receta_Controller.php?accion=editar&id=<?php echo $row['RECETA_ID_RECETA_PK']; ?>">✏</a>
+                                <?php if (strtolower($row['ESTADO']) == 'activo'): ?>
+                                    <a href="/Farmacia/controllers/receta_Controller.php?accion=desactivar&id=<?php echo $row['RECETA_ID_RECETA_PK']; ?>" onclick="return confirm('¿Seguro que deseas desactivar esta receta?');">🛑</a>
+                                <?php else: ?>
+                                    <a href="/Farmacia/controllers/receta_Controller.php?accion=activar&id=<?php echo $row['RECETA_ID_RECETA_PK']; ?>" onclick="return confirm('¿Activar esta receta?');">✅</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4">No se encontraron recetas.</td>
+                    </tr>
+                <?php endif; ?>
+            </table>
+        </div>
+    </body>
 </div>
 
 <?php include_once realpath(__DIR__ . '/../../includes/footer.php'); ?>
