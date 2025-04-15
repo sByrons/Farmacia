@@ -49,12 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $accion === 'eliminar' && isset($_GE
 }
 
 // --- ACCESO DIRECTO: redireccionar a listado ---
+// --- ACCESO DIRECTO: redireccionar a listado ---
 if (file_exists(__DIR__ . '/../views/receta/listar.php')) {
     header("Location: /Farmacia/views/receta/listar.php");
     exit;
 } else {
     echo "Archivo listar.php no encontrado en /views/receta/";
 }
+
 
 // RecetaController.php
 
