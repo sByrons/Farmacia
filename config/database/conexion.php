@@ -2,10 +2,10 @@
 function conectarOracle($rol) {
     $host = "//localhost/XEPDB1";  // Cambiar si usás otro nombre de servicio
 
-    if ($rol === "admin") {
-        $usuario = "FARMACIA_ADM";
-        $clave = "admin123";
-    } elseif ($rol === "empleado") {
+    if ($rol === "system") {
+        $usuario = "aejjiiQS06";
+        $clave = "farmacia";
+    } elseif ($rol === "123") {
         $usuario = "FARMACIA_EMPLEADO";
         $clave = "empleado123";
     } else {
