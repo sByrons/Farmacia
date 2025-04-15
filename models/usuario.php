@@ -258,25 +258,26 @@ function actualizarUsuario($datos) {
     $direccion    = $datos['direccion_exacta'];
 
     $sql = "
-    BEGIN
-        -- Actualizar datos del usuario
-        FARMACIA.FIDE_USUARIOS_PKG.USUARIOS_ACTUALIZAR_SP(
-            :P_ID_USUARIO, :P_NOMBRE, :P_APELLIDO, :P_CEDULA, :P_USUARIO,
-            :P_CONTRASENA, :P_ID_PUESTO, :P_ID_TIPO, :P_ID_ESTADO, :P_EMAIL
-        );
+BEGIN
+    -- Actualizar datos del usuario
+    FARMACIA.FIDE_USUARIOS_PKG.USUARIOS_ACTUALIZAR_SP(
+        :P_ID_USUARIO, :P_NOMBRE, :P_APELLIDO, :P_CEDULA, :P_USUARIO,
+        :P_CONTRASENA, :P_ID_PUESTO, :P_ID_TIPO, :P_ID_ESTADO, :P_EMAIL
+    );
 
-        -- Actualizar dirección
-        FARMACIA.FIDE_CONTACTO_PKG.ACTUALIZAR_DIRECCION_SP(
-            :P_ID_USUARIO, :P_PROVINCIA, :P_CANTON, :P_DISTRITO,
-            :P_DIRECCION, :P_ID_ESTADO
-        );
+    -- Actualizar dirección
+    FARMACIA.FIDE_CONTACTO_PKG.ACTUALIZAR_DIRECCION_SP(
+        :P_PROVINCIA, :P_CANTON, :P_DISTRITO,
+        :P_DIRECCION, :P_ID_USUARIO, NULL, :P_ID_ESTADO
+    );
 
-        -- Actualizar teléfono
-        FARMACIA.FIDE_CONTACTO_PKG.ACTUALIZAR_TELEFONO_SP(
-            :P_ID_USUARIO, :P_TELEFONO, :P_ID_TIPO_TEL, :P_ID_ESTADO
-        );
-    END;
-    ";
+    -- Actualizar teléfono
+    FARMACIA.FIDE_CONTACTO_PKG.ACTUALIZAR_TELEFONO_SP(
+        :P_TELEFONO, :P_ID_TIPO_TEL, :P_ID_USUARIO, NULL, :P_ID_ESTADO
+    );
+END;
+";
+
 
     $stmt = oci_parse($conn, $sql);
 
