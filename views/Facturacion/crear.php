@@ -161,6 +161,8 @@ $descuento = 0;
 
     calcularTotal(); // Inicializar el cálculo al cargar
   </script>
+
+<script src="/Farmacia/assets/js/script.js"></script>
 </div>
 
 <?php include_once realpath(__DIR__ . '/../../includes/footer.php'); ?>
