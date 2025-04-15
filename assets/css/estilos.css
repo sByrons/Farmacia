@@ -55,74 +55,97 @@ button:hover {
 /* === Página de Listado de Usuarios === */
 
 body.usuarios-page {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #4db8ff, #005580);
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #4db8ff, #005580);
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    max-width: 1000px;
-    margin: 60px auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  max-width: 100%;
+  margin: 60px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  overflow-x: auto;
 }
 
 .container h2 {
-    text-align: center;
-    color: #005580;
-    margin-bottom: 20px;
+  text-align: center;
+  color: #005580;
+  margin-bottom: 20px;
 }
 
 form.filtro-estado {
-    text-align: right;
-    margin-bottom: 20px;
+  text-align: right;
+  margin-bottom: 20px;
 }
 
 form.filtro-estado select {
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
+/* Tabla con scroll horizontal si es necesario */
 table.usuarios {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
+  width: 100%;
+  min-width: 1200px; /* Aumenta este valor si agregas más columnas */
+  border-collapse: collapse;
+  background: white;
+  overflow-x: auto;
+  display: block;
+  white-space: nowrap;
 }
 
 table.usuarios th,
 table.usuarios td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: top;
 }
 
 table.usuarios th {
-    background-color: #005580;
-    color: white;
+  background-color: #005580;
+  color: white;
+}
+
+table.usuarios tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.usuarios tr:hover {
+  background-color: #eef;
+}
+
+table.usuarios td {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .activo {
-    color: green;
-    font-weight: bold;
+  color: green;
+  font-weight: bold;
 }
 
 .inactivo {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
+
 a {
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 18px;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 18px;
 }
 
 a:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
+
 /* === Página de Crear Usuario === */
 
 body.usuarios-page {

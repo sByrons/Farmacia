@@ -11,6 +11,7 @@
 
         <input type="text" name="nombre" placeholder="Nombre" required>
         <input type="text" name="apellido" placeholder="Apellido" required>
+        <input type="text" name="cedula" placeholder="Cédula" required>
         <input type="email" name="email" placeholder="Correo electrónico" required>
 
         <select name="id_tipo" id="id_tipo" required onchange="verificarTipoUsuario()">
