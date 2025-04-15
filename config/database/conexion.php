@@ -21,4 +21,5 @@ function conectarOracle($rol) {
 
     return $conn;
 }
+
 ?>

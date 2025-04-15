@@ -1,4 +1,3 @@
-Crear.php
 <?php 
 include_once realpath(__DIR__ . '/../../includes/head.php'); 
 include_once realpath(__DIR__ . '/../../includes/navbar.php'); 
