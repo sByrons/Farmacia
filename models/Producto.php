@@ -132,26 +132,30 @@ function eliminarProducto($idProducto, $estadoInactivo) {
 function obtenerProductoPorId($idProducto) {
     $conn = conectarOracle("admin");
 
-    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_CONSULTAR_SP(:P_ID_PRODUCTO, :P_NOMBRE, :P_DESCRIPCION, :P_PRECIO); END;");
+    $stmt = oci_parse($conn, "BEGIN FARMACIA.FIDE_PRODUCTO_PKG.PRODUCTO_CONSULTAR_SP(:P_ID_PRODUCTO, :P_NOMBRE, :P_DESCRIPCION, :P_PRECIO, :P_ID_ESTADO); END;");
 
     oci_bind_by_name($stmt, ":P_ID_PRODUCTO", $idProducto);
     oci_bind_by_name($stmt, ":P_NOMBRE", $nombre, 100);
-    oci_bind_by_name($stmt, ":P_DESCRIPCION", $descripcion, 200);
+    oci_bind_by_name($stmt, ":P_DESCRIPCION", $descripcion, 255);
     oci_bind_by_name($stmt, ":P_PRECIO", $precio);
+    oci_bind_by_name($stmt, ":P_ID_ESTADO", $idEstado);
 
     oci_execute($stmt);
 
     oci_free_statement($stmt);
     oci_close($conn);
 
-    // Retornar como un arreglo asociativo compatible con tu vista
     return [
         'PRODUCTO_ID_PRODUCTO_PK' => $idProducto,
         'NOMBRE' => $nombre,
         'DESCRIPCION' => $descripcion,
-        'PRECIO' => $precio
-        // IMPORTANTE: ESTADO no se recupera aquí, debes obtenerlo aparte
+        'PRECIO' => $precio,
+        'ESTADO_ID_ESTADO_PK' => $idEstado
     ];
+
+
+
+
 
 
 

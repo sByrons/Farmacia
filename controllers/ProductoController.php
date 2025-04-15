@@ -59,11 +59,27 @@ if (isset($_GET['accion']) && in_array($_GET['accion'], ['eliminar', 'activar'])
     header("Location: ../controllers/productoController.php");
     exit;
 }
+if (isset($_GET['accion']) && $_GET['accion'] === 'desactivar' && isset($_GET['id'])) {
+    $idProducto = $_GET['id'];
+    $nuevoEstado = 2; // Estado 2 = Inactivo (según tu lógica)
+
+    $resultado = eliminarProducto($idProducto, $nuevoEstado); // Asumiendo que "eliminarProducto" maneja la actualización de estado
+
+    if ($resultado === true) {
+        $_SESSION['mensaje'] = "Producto desactivado correctamente.";
+    } else {
+        $_SESSION['error'] = $resultado;
+    }
+
+    header("Location: ../controllers/productoController.php");
+    exit;
+}
+
 
  if (isset($_GET['accion']) && $_GET['accion'] === 'editar' && isset($_GET['id'])) {
     $idProducto = $_GET['id'];
     $producto = obtenerProductoPorId($idProducto);
-    
+    $estados = obtenerEstados();  
     include_once __DIR__ . '/../views/producto/editar.php';
     exit;
 }
