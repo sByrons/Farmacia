@@ -1,7 +1,8 @@
+Crear.php
 <?php 
 include_once realpath(__DIR__ . '/../../includes/head.php'); 
 include_once realpath(__DIR__ . '/../../includes/navbar.php'); 
-include_once __DIR__ . '/../views/receta/crear.php';
+
 include_once realpath(__DIR__ . '/../../models/Producto.php');
 include_once realpath(__DIR__ . '/../../models/UnidadDosis.php');
 include_once realpath(__DIR__ . '/../../models/Estado.php');
@@ -84,4 +85,3 @@ $estados = obtenerEstados();
 </div>
 
 <?php include_once realpath(__DIR__ . '/../../includes/footer.php'); ?>
-

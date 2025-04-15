@@ -37,3 +37,4 @@ function eliminarReceta($idReceta) {
         return "Error al eliminar la receta: " . $e->getMessage();
     }
 }
+
