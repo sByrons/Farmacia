@@ -69,3 +69,4 @@ $recetas = obtenerRecetasPorEstado($estadoId); // Función que obtiene las recet
 
 // Pasar las recetas y el estado a la vista
 include_once realpath(__DIR__ . '/../views/receta/listar.php');
+
